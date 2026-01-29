@@ -9,8 +9,3 @@ A tool that analyzes slow queries, index usage, and schema design, then produces
 - Schema anti-pattern detection
 - Recommendation engine with confidence levels
 
-## Signals
-
-- Strong SQL + systems knowledge
-- Analytical depth
-- Senior-level debugging instincts
