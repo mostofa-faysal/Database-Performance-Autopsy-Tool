@@ -1,125 +1,145 @@
-# Database Performance Autopsy Tool
+LLM Cost Drift Observatory
 
-A diagnostic tool that analyzes database query execution plans and schema metadata to explain **why** queries are slow, not just **that** they are slow.
+A governance-oriented observability system that measures how large language models behave over time in production, with a focus on cost drift, response variance, and embedding stability across model versions, prompts, and deployments.
 
-Most database tools surface metrics. This project focuses on **root-cause analysis** and **human-readable explanations**, bridging the gap between raw query plans and senior-level database reasoning.
+Most teams treat LLMs as opaque APIs. This project treats them as evolving systems that require measurement, baselines, and post-hoc explainability.
 
----
+Problem Statement
 
-## Problem Statement
+LLMs introduce operational risks that traditional monitoring systems do not capture. While teams may notice rising costs or perceived quality changes, they often lack the ability to answer foundational questions:
 
-Modern databases provide detailed execution plans, but interpreting them requires deep systems and SQL expertise. Developers often know a query is slow but struggle to answer:
+Why did token usage increase for this specific feature or endpoint?
 
-* Why did the planner choose this execution path?
-* Why was an index ignored?
-* Is the problem data distribution, schema design, or query structure?
-* What change would actually improve performance?
+Is cost growth driven by traffic, prompt changes, or model behavior?
 
-This tool aims to answer those questions directly.
+Did a model or version change alter response semantics?
 
----
+Are embeddings still stable enough for downstream systems such as search or RAG?
 
-## Project Goals
+Which deviations are expected variance, and which indicate regressions?
 
-* Parse and normalize database execution plans
-* Detect performance anti-patterns (index misuse, cardinality errors, schema issues)
-* Produce **human-readable diagnoses** with supporting evidence
-* Separate *signals* from *conclusions* to maintain explainability
-* Remain deterministic, testable, and auditable
+Without systematic measurement, these questions are answered heuristically or not at all.
 
-This is not a query optimizer. It is a diagnostic and reasoning tool.
+This project exists to make LLM behavior measurable, explainable, and auditable over time.
 
----
+Project Goals
 
-## Current Scope
+Capture token-level usage signals per request, model, endpoint, and environment
 
-**Databases**
+Attribute LLM spend to product features, teams, and experiments
 
-* PostgreSQL (initial focus)
+Measure response similarity and semantic drift longitudinally
 
-**Analysis Level**
+Monitor embedding stability across model, prompt, and version changes
 
-* Single-query analysis
-* Execution plan–driven diagnostics
-* Rule- and heuristic-based reasoning (no black-box ML)
+Establish statistical baselines for cost and quality signals
 
-**Status**
+Surface deviations with evidence-backed, human-readable explanations
 
-* Execution plan parsing implemented
-* Index usage analysis in progress
-* Inference and explanation layers under development
+This is not an LLM evaluation benchmark.
+It is an operational observability and governance system.
 
----
+Current Scope
 
-## Repository Structure
+LLM Providers
 
-```
-Database-Performance-Autopsy-Tool/
-├─ db-diagnostician/        # Project / package root
-│  ├─ analysis/             # Parsing and analysis logic
-│  ├─ fixtures/             # Real EXPLAIN plan samples
-│  ├─ tests/                # Deterministic test suite
-│  └─ README.md             # Package-level documentation
-└─ README.md                # (this file)
-```
+Provider-agnostic design
 
-All development and execution happens inside `db-diagnostician/`.
+Initial focus on OpenAI-compatible APIs
 
----
+Analysis Level
 
-## Design Principles
+Per-request and per-feature analysis
 
-* **Explainability first**
-  Every diagnosis must be traceable to concrete evidence.
+Time-series drift detection
 
-* **Signals before conclusions**
-  Low-level findings are emitted before higher-level reasoning.
+Rule- and statistics-based diagnostics
 
-* **Separation of concerns**
-  Parsing, analysis, inference, and explanation are isolated layers.
+No black-box ML or subjective scoring
 
-* **Conservative by default**
-  The tool avoids speculative recommendations and surfaces confidence explicitly.
+Status
 
----
+Deterministic usage and token tracking implemented
 
-## Intended Audience
+Cost attribution using explicit pricing tables implemented
 
-* Backend engineers
-* Data engineers
-* Senior developers diagnosing production performance issues
-* Learners studying database internals and query planners
+Embedding snapshot storage in progress
 
----
+Drift analysis, baselines, and alerting under development
 
-## Roadmap (High Level)
+Repository Structure
 
-* Index hit/miss analysis
-* Cardinality misestimation detection
-* Schema anti-pattern detection
-* Root-cause inference aggregation
-* Natural language explanation rendering
-* CLI and API interfaces
+LLM-Cost-Drift-Observatory/
+├─ observatory/ # Project / package root
+│ ├─ ingestion/ # Instrumentation and event capture
+│ ├─ cost/ # Cost attribution and unit economics
+│ ├─ drift/ # Similarity and stability analysis
+│ ├─ baselines/ # Statistical baseline management
+│ ├─ alerts/ # Deviation detection and reporting
+│ ├─ fixtures/ # Synthetic and anonymized samples
+│ ├─ tests/ # Deterministic test suite
+│ └─ README.md # Package-level documentation
+└─ README.md # (this file)
 
----
+All execution, analysis, and reporting logic resides within observatory/.
 
-## Non-Goals
+Design Principles
 
-* Automatic query rewriting
-* Autonomous schema migration
-* Black-box performance scoring
-* Database-specific tuning magic
+Explainability first
+Every metric, alert, or diagnosis must be traceable to concrete measurements and historical context.
 
----
+Signals before interpretation
+Low-level usage and embedding signals are captured and preserved before higher-level reasoning is applied.
 
-## License
+Governance by default
+The system is designed for auditability, cost accountability, and post-incident analysis.
+
+Conservative deviation detection
+Drift is treated as an observation, not a failure. Alerts emphasize confidence, magnitude, and context.
+
+Provider neutrality
+No assumptions are made about vendor internals or undocumented behavior.
+
+Intended Audience
+
+AI platform and infrastructure engineers
+
+ML engineers operating LLM-backed systems
+
+Engineering managers accountable for AI spend
+
+Teams building internal AI governance or FinOps tooling
+
+Roadmap (High Level)
+
+Feature-level unit economics and ROI attribution
+
+Prompt-change impact analysis
+
+Cross-model and cross-version baselines
+
+Embedding instability risk indicators
+
+CLI-driven reports and scheduled summaries
+
+Policy hooks for governance and approval workflows
+
+Non-Goals
+
+Prompt optimization or automatic rewriting
+
+Subjective or crowd-sourced quality scoring
+
+Model ranking or selection frameworks
+
+Black-box evaluation metrics
+
+Vendor-specific tuning logic
+
+License
 
 TBD
 
----
+Author
 
-## Author
-
-Built as a systems-focused, explainability-driven project to demonstrate deep SQL, database internals, and diagnostic reasoning.
-
----
+Designed as an observability and governance-focused system to demonstrate disciplined measurement, statistical reasoning, and responsible operation of LLMs in production environments.
