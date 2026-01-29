@@ -1,0 +1,17 @@
+[
+  {
+    "Plan": {
+      "Node Type": "Seq Scan",
+      "Relation Name": "users",
+      "Startup Cost": 0.0,
+      "Total Cost": 183.0,
+      "Plan Rows": 10000,
+      "Plan Width": 64,
+      "Actual Startup Time": 0.015,
+      "Actual Total Time": 12.34,
+      "Actual Rows": 9500,
+      "Actual Loops": 1,
+      "Filter": "active = true"
+    }
+  }
+]
